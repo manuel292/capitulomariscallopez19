@@ -245,15 +245,15 @@
 
   <div class="card">
     <h2>Formulario de Postulación</h2>
-    <form>
+    <form id="formularioPostulacion">
       <input type="text" id="nombre" placeholder="Nombre completo" required>
       <input type="number" id="edad" placeholder="Edad" required>
       <input type="tel" id="telefono" placeholder="Número de teléfono" required>
       <textarea id="motivo" rows="4" placeholder="¿Por qué querés postularte?" required></textarea>
 
-      <a id="btnWhatsapp" href="#" target="_blank" style="text-decoration:none;">
-        <button type="button"><i class="fab fa-whatsapp"></i> Enviar Postulación</button>
-      </a>
+      <button type="button" id="btnEnviarWhatsapp">
+        <i class="fab fa-whatsapp"></i> Enviar Postulación
+      </button>
       <div id="statusMessage">¡Gracias Manuel! Redirigiendo a WhatsApp...</div>
     </form>
   </div>
@@ -372,7 +372,7 @@
       Templo Solar Aurora – Asunción, Paraguay
     </p>
     <div style="text-align:center;">
-      <a href="https://www.google.com/maps/search/Templo+Solar+Aurora+Asuncion" 
+      <a href="https://maps.google.com/?q=Templo+Solar+Aurora+Asuncion" 
          target="_blank" 
          style="text-decoration:none;">
         <button type="button" style="background: var(--dark); color: var(--gold); padding: 12px 25px; border: 1px solid var(--gold);">
@@ -396,6 +396,7 @@
 </footer>
 
 <script>
+  // 1. Botón Volver Arriba
   window.onscroll = function() {
     const btn = document.getElementById("btnBackToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -405,34 +406,38 @@
     }
   };
 
-  document.getElementById('btnWhatsapp').addEventListener('click', function () {
+  // 2. Lógica de Envío Directo a WhatsApp (CORREGIDO)
+  document.getElementById('btnEnviarWhatsapp').addEventListener('click', function () {
     const nombre = document.getElementById('nombre').value;
-    const edad = parseInt(document.getElementById('edad').value);
+    const edad = document.getElementById('edad').value;
     const telefono = document.getElementById('telefono').value;
     const motivo = document.getElementById('motivo').value;
     const status = document.getElementById('statusMessage');
 
+    // Validación
     if (!nombre || !edad || !telefono || !motivo) {
       alert('Por favor completá todos los campos');
       return;
     }
 
-    if (edad < 12 || edad > 21) {
-      alert('Atención: La edad habitual para postular es de 12 a 21 años. Verifica tu ingreso.');
-      return;
-    }
-
+    // Mensaje visual
     status.style.display = "block";
 
-    const mensaje = `Postulación Capítulo Mariscal López 19\n\nNombre: ${nombre}\nEdad: ${edad}\nTeléfono: ${telefono}\n\nMotivo:\n${motivo}`;
+    // Formateo del mensaje
+    const texto = "Postulación Capítulo Mariscal López 19\n\n" +
+                  "Nombre: " + nombre + "\n" +
+                  "Edad: " + edad + "\n" +
+                  "Teléfono: " + telefono + "\n\n" +
+                  "Motivo:\n" + motivo;
 
-    // NÚMERO CORREGIDO AQUÍ
-    const url = `https://wa.me/595986105233?text=${encodeURIComponent(mensaje)}`;
+    // Enlace directo al número 0986 105233
+    const url = "https://wa.me/595986105233?text=" + encodeURIComponent(texto);
     
+    // Redirección inmediata
     setTimeout(() => {
-      window.open(url, '_blank');
+      window.location.href = url;
       status.style.display = "none";
-    }, 1000);
+    }, 500);
   });
 </script>
 
