@@ -245,7 +245,7 @@
 
   <div class="card">
     <h2>Formulario de Postulación</h2>
-    <form id="formularioPostulacion">
+    <form id="formularioPostulacion" onsubmit="return false;">
       <input type="text" id="nombre" placeholder="Nombre completo" required>
       <input type="number" id="edad" placeholder="Edad" required>
       <input type="tel" id="telefono" placeholder="Número de teléfono" required>
@@ -396,7 +396,6 @@
 </footer>
 
 <script>
-  // 1. Botón Volver Arriba
   window.onscroll = function() {
     const btn = document.getElementById("btnBackToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -406,38 +405,37 @@
     }
   };
 
-  // 2. Lógica de Envío Directo a WhatsApp (CORREGIDO)
-  document.getElementById('btnEnviarWhatsapp').addEventListener('click', function () {
-    const nombre = document.getElementById('nombre').value;
-    const edad = document.getElementById('edad').value;
-    const telefono = document.getElementById('telefono').value;
-    const motivo = document.getElementById('motivo').value;
+  document.getElementById('btnEnviarWhatsapp').addEventListener('click', function (e) {
+    // Evita cualquier acción por defecto
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const edad = document.getElementById('edad').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const motivo = document.getElementById('motivo').value.trim();
     const status = document.getElementById('statusMessage');
 
-    // Validación
     if (!nombre || !edad || !telefono || !motivo) {
       alert('Por favor completá todos los campos');
       return;
     }
 
-    // Mensaje visual
     status.style.display = "block";
 
-    // Formateo del mensaje
     const texto = "Postulación Capítulo Mariscal López 19\n\n" +
-                  "Nombre: " + nombre + "\n" +
-                  "Edad: " + edad + "\n" +
-                  "Teléfono: " + telefono + "\n\n" +
-                  "Motivo:\n" + motivo;
+                  "*Nombre:* " + nombre + "\n" +
+                  "*Edad:* " + edad + " años\n" +
+                  "*Teléfono:* " + telefono + "\n\n" +
+                  "*Motivo:*\n" + motivo;
 
-    // Enlace directo al número 0986 105233
-    const url = "https://wa.me/595986105233?text=" + encodeURIComponent(texto);
+    // Se usa la API de WhatsApp para mayor compatibilidad móvil
+    const url = "https://api.whatsapp.com/send?phone=595986105233&text=" + encodeURIComponent(texto);
     
-    // Redirección inmediata
+    // Pequeño retraso para que el usuario vea el mensaje de estatus antes de salir
     setTimeout(() => {
-      window.location.href = url;
+      window.location.assign(url);
       status.style.display = "none";
-    }, 500);
+    }, 400);
   });
 </script>
 
