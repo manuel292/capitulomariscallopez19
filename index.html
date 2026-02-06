@@ -396,6 +396,7 @@
 </footer>
 
 <script>
+  // 1. Botón Volver Arriba
   window.onscroll = function() {
     const btn = document.getElementById("btnBackToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -405,10 +406,8 @@
     }
   };
 
+  // 2. Lógica Híbrida (Celular y PC)
   document.getElementById('btnEnviarWhatsapp').addEventListener('click', function (e) {
-    // Evita cualquier acción por defecto
-    e.preventDefault();
-
     const nombre = document.getElementById('nombre').value.trim();
     const edad = document.getElementById('edad').value.trim();
     const telefono = document.getElementById('telefono').value.trim();
@@ -428,12 +427,21 @@
                   "*Teléfono:* " + telefono + "\n\n" +
                   "*Motivo:*\n" + motivo;
 
-    // Se usa la API de WhatsApp para mayor compatibilidad móvil
-    const url = "https://api.whatsapp.com/send?phone=595986105233&text=" + encodeURIComponent(texto);
+    const numero = "595986105233";
     
-    // Pequeño retraso para que el usuario vea el mensaje de estatus antes de salir
+    // DETECCIÓN DE DISPOSITIVO
+    const esMovil = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    // Si es móvil usa API directa, si es PC usa WEB para mayor estabilidad
+    const urlBase = esMovil ? "https://api.whatsapp.com/send" : "https://web.whatsapp.com/send";
+    const urlFinal = urlBase + "?phone=" + numero + "&text=" + encodeURIComponent(texto);
+    
     setTimeout(() => {
-      window.location.assign(url);
+      if (esMovil) {
+        window.location.href = urlFinal;
+      } else {
+        window.open(urlFinal, '_blank');
+      }
       status.style.display = "none";
     }, 400);
   });
@@ -441,4 +449,5 @@
 
 </body>
 </html>
+
 
