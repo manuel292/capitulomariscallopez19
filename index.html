@@ -208,14 +208,6 @@
       border-radius: 50%;
       cursor: pointer;
     }
-
-    #statusMessage {
-      display: none;
-      text-align: center;
-      color: #28a745;
-      font-weight: bold;
-      margin-top: 10px;
-    }
   </style>
 </head>
 <body>
@@ -254,7 +246,6 @@
       <button type="button" id="btnEnviarWhatsapp">
         <i class="fab fa-whatsapp"></i> Enviar Postulación
       </button>
-      <div id="statusMessage">Cargando...</div>
     </form>
   </div>
 
@@ -396,7 +387,6 @@
 </footer>
 
 <script>
-  // 1. Botón Volver Arriba
   window.onscroll = function() {
     const btn = document.getElementById("btnBackToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -406,22 +396,16 @@
     }
   };
 
-  // 2. Lógica Híbrida (Celular y PC)
   document.getElementById('btnEnviarWhatsapp').addEventListener('click', function (e) {
     const nombre = document.getElementById('nombre').value.trim();
     const edad = document.getElementById('edad').value.trim();
     const telefono = document.getElementById('telefono').value.trim();
     const motivo = document.getElementById('motivo').value.trim();
-    const status = document.getElementById('statusMessage');
 
     if (!nombre || !edad || !telefono || !motivo) {
       alert('Por favor completá todos los campos');
       return;
     }
-
-    // Aquí cambiamos el texto dinámicamente según el nombre ingresado
-    status.innerText = "¡Gracias " + nombre + "! Redirigiendo a WhatsApp...";
-    status.style.display = "block";
 
     const texto = "Postulación Capítulo Mariscal López 19\n\n" +
                   "*Nombre:* " + nombre + "\n" +
@@ -430,20 +414,17 @@
                   "*Motivo:*\n" + motivo;
 
     const numero = "595986105233";
-    
     const esMovil = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
+    // Ruta dinámica según dispositivo
     const urlBase = esMovil ? "https://api.whatsapp.com/send" : "https://web.whatsapp.com/send";
     const urlFinal = urlBase + "?phone=" + numero + "&text=" + encodeURIComponent(texto);
     
-    setTimeout(() => {
-      if (esMovil) {
-        window.location.href = urlFinal;
-      } else {
-        window.open(urlFinal, '_blank');
-      }
-      status.style.display = "none";
-    }, 400);
+    if (esMovil) {
+      window.location.href = urlFinal;
+    } else {
+      window.open(urlFinal, '_blank');
+    }
   });
 </script>
 
