@@ -27,7 +27,6 @@
       background: var(--soft);
       color: var(--dark);
       line-height: 1.7;
-      /* Mejora UX: Desplazamiento suave al usar el botón de volver arriba */
       scroll-behavior: smooth; 
     }
 
@@ -195,7 +194,6 @@
       text-transform: uppercase;
     }
 
-    /* ESTILOS ADICIONALES PARA LAS MEJORAS (Sin cambiar el diseño original) */
     #btnBackToTop {
       display: none; 
       position: fixed;
@@ -398,7 +396,6 @@
 </footer>
 
 <script>
-  // 1. Lógica del Botón Volver Arriba
   window.onscroll = function() {
     const btn = document.getElementById("btnBackToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -408,41 +405,30 @@
     }
   };
 
-  // 2. Lógica del Formulario con Validación de Edad y Mensaje UX
   document.getElementById('btnWhatsapp').addEventListener('click', function () {
     const nombre = document.getElementById('nombre').value;
-    const edad = parseInt(document.getElementById('edad').value); // Convertimos a número para validar
+    const edad = parseInt(document.getElementById('edad').value);
     const telefono = document.getElementById('telefono').value;
     const motivo = document.getElementById('motivo').value;
     const status = document.getElementById('statusMessage');
 
-    // Validación de campos vacíos
     if (!nombre || !edad || !telefono || !motivo) {
       alert('Por favor completá todos los campos');
       return;
     }
 
-    // MEJORA UX: Validación de edad (Rango DeMolay habitual 12-21 años)
     if (edad < 12 || edad > 21) {
       alert('Atención: La edad habitual para postular es de 12 a 21 años. Verifica tu ingreso.');
       return;
     }
 
-    // MEJORA UX: Confirmación visual de envío
     status.style.display = "block";
 
-    const mensaje = `Postulación Capítulo Mariscal López 19
+    const mensaje = `Postulación Capítulo Mariscal López 19\n\nNombre: ${nombre}\nEdad: ${edad}\nTeléfono: ${telefono}\n\nMotivo:\n${motivo}`;
 
-Nombre: ${nombre}
-Edad: ${edad}
-Teléfono: ${telefono}
-
-Motivo:
-${motivo}`;
-
+    // NÚMERO CORREGIDO AQUÍ
     const url = `https://wa.me/595986105233?text=${encodeURIComponent(mensaje)}`;
     
-    // Abrimos WhatsApp después de un pequeño retraso para que se vea el mensaje de éxito
     setTimeout(() => {
       window.open(url, '_blank');
       status.style.display = "none";
